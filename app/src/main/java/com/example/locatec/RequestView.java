@@ -1,6 +1,7 @@
 package com.example.locatec;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -30,9 +31,15 @@ public class RequestView extends LinearLayout {
     LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(infService);
     View view = layoutInflater.inflate(R.layout.request, this, false);
     latitude = view.findViewById(R.id.latitude);
+    for (int i = 0; i < 10; i++) {
+      System.out.println();
+    }
+    System.out.println(requestInfo.latitude);
+    System.out.println(requestInfo.longitude);
+
     latitude.setText(requestInfo.latitude);
 
-    latitude = view.findViewById(R.id.longitude);
+    longitude = view.findViewById(R.id.longitude);
     longitude.setText(requestInfo.longitude);
 
     addView(view);
@@ -41,6 +48,11 @@ public class RequestView extends LinearLayout {
 
 
 class requestInfo {
-  String latitude = "testA";
-  String longitude = "testB";
+  String latitude = "test";
+  String longitude = "test";
+
+  public requestInfo(String latitude, String longitude) {
+    this.latitude = latitude;
+    this.longitude = longitude;
+  }
 }
