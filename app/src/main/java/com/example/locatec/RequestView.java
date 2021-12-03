@@ -47,12 +47,3 @@ public class RequestView extends LinearLayout {
 }
 
 
-class requestInfo {
-  String latitude = "test";
-  String longitude = "test";
-
-  public requestInfo(String latitude, String longitude) {
-    this.latitude = latitude;
-    this.longitude = longitude;
-  }
-}
