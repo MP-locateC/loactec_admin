@@ -45,10 +45,6 @@ public class ListAdapter extends BaseAdapter {
     TextView longitude = convertView.findViewById(R.id.longitude);
     TextView type = convertView.findViewById(R.id.type);
 
-
-    // todo :: type 설정
-
-
     // todo :: 이미지 띄우기
     convertView.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -60,10 +56,19 @@ public class ListAdapter extends BaseAdapter {
 
     latitude.setText("위도 : " + item.latitude);
     longitude.setText("경도 : " + item.longitude);
-    type.setText(item.type);
+
+    typeNaming(item, type);
 
     return convertView;
 
+  }
+
+  private void typeNaming(Test2 item, TextView type) {
+    if (item.type.equals("smoking"))
+      type.setText("흡연 부스");
+    if (item.type.equals("trash"))
+      type.setText("쓰레기통");
+    type.setText(item.type);
   }
 
   public void addItem(Test2 test) {
