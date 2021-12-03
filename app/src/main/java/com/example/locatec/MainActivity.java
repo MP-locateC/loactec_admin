@@ -2,19 +2,14 @@ package com.example.locatec;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.Getter;
@@ -53,9 +48,9 @@ public class MainActivity extends AppCompatActivity {
     Log.d("TEST", "성공1");
 //    context = this;
 
-    api.findAll().enqueue(new Callback<Test>() {
+    api.findAll().enqueue(new Callback<AllRequestItemsJson>() {
       @Override
-      public void onResponse(Call<Test> call, Response<Test> response) {
+      public void onResponse(Call<AllRequestItemsJson> call, Response<AllRequestItemsJson> response) {
 //        requestInfo = new requestInfo("hello", "test");
         Log.d("TEST", "성공2");
         listView = findViewById(R.id.requestLists);
@@ -63,12 +58,12 @@ public class MainActivity extends AppCompatActivity {
 //        Log.d("TEST", response.body().response.toString());
 
         for (int i = 0; i < response.body().response.size(); i++) {
-          Test2 test2 = response.body().response.get(i);
+          RequestItem requestItem = response.body().response.get(i);
 
-          Log.d("TEST", "성공3" + test2.latitude);
-          Log.d("TEST", "성공3" + test2.longitude);
+          Log.d("TEST", "성공3" + requestItem.latitude);
+          Log.d("TEST", "성공3" + requestItem.longitude);
 
-          adapter.addItem(test2);
+          adapter.addItem(requestItem);
 //          requestInfo = new requestInfo(test2.latitude, test2.longitude);
 //          requestView = new RequestView(getApplicationContext(), requestInfo);
 //          ArrayAdapter<RequestView> adapter = new ArrayAdapter<RequestView>(this,
@@ -85,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
       }
 
       @Override
-      public void onFailure(Call<Test> call, Throwable t) {
+      public void onFailure(Call<AllRequestItemsJson> call, Throwable t) {
         Log.d("TEST", "실패");
         t.printStackTrace();
       }
@@ -98,22 +93,3 @@ public class MainActivity extends AppCompatActivity {
   }
 }
 
-@Getter
-@Setter
-class Test {
-  int status;
-  List<Test2> response;
-}
-
-@Getter
-@Setter
-class Test2 {
-  Long id;
-  String createdAt;
-  String updatedAt;
-  String latitude;
-  String longitude;
-  String type;
-  boolean isRegister;
-  String imageUrl;
-}

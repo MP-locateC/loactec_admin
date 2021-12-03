@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListAdapter extends BaseAdapter {
-  List<Test2> items = new ArrayList<>();
+  List<RequestItem> items = new ArrayList<>();
   Context context;
 
   @Override
@@ -33,7 +33,7 @@ public class ListAdapter extends BaseAdapter {
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     context = parent.getContext();
-    Test2 item = items.get(position);
+    RequestItem item = items.get(position);
 
     if (convertView == null) {
       LayoutInflater inflater =
@@ -63,7 +63,7 @@ public class ListAdapter extends BaseAdapter {
 
   }
 
-  private void typeNaming(Test2 item, TextView type) {
+  private void typeNaming(RequestItem item, TextView type) {
     if (item.type.equals("smoking"))
       type.setText("흡연 부스");
     if (item.type.equals("trash"))
@@ -71,7 +71,7 @@ public class ListAdapter extends BaseAdapter {
     type.setText(item.type);
   }
 
-  public void addItem(Test2 test) {
+  public void addItem(RequestItem test) {
     items.add(test);
   }
 }
