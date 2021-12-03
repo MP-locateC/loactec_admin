@@ -1,24 +1,40 @@
 package com.example.locatec;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+
 public class ListAdapter extends BaseAdapter {
   List<RequestItem> items = new ArrayList<>();
+  ClickListener clickListener;
   Context context;
+
+  public void setClickListener(ClickListener clickListner) {
+    this.clickListener = clickListener;
+  }
 
   @Override
   public int getCount() {
@@ -46,15 +62,76 @@ public class ListAdapter extends BaseAdapter {
       convertView = inflater.inflate(R.layout.request, parent, false);
     }
 
+    TextView id = convertView.findViewById(R.id.id);
     TextView latitude = convertView.findViewById(R.id.latitude);
     TextView longitude = convertView.findViewById(R.id.longitude);
     TextView type = convertView.findViewById(R.id.type);
+    Button accept = convertView.findViewById(R.id.accept);
+    Button reject = convertView.findViewById(R.id.reject);
 
-    // todo :: 이미지 띄우기
+    id.setText(item.id.toString());
+    latitude.setText("위도 : " + item.latitude);
+    longitude.setText("경도 : " + item.longitude);
+
+    typeNaming(item, type);
+
+
+    Gson gson = new GsonBuilder()
+            .setLenient()
+            .create();
+
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl("https://www.stmap.kro.kr")
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build();
+
+    Api api = retrofit.create(Api.class);
+    accept.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        api.permitRequest(new ItemId(item.id)).enqueue(new Callback<OneRequestItemJson>() {
+          @Override
+          public void onResponse(Call<OneRequestItemJson> call, Response<OneRequestItemJson> response) {
+            Log.d("요청 처리", "수락 처리 성공");
+            Toast.makeText(context, "수락 처리 성공", Toast.LENGTH_SHORT).show();
+          }
+
+          @Override
+          public void onFailure(Call<OneRequestItemJson> call, Throwable t) {
+            Log.d("요청 처리", "수락 처리 실패");
+            t.printStackTrace();
+          }
+        });
+      }
+    });
+
+
+    reject.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        api.rejectRequest(new ItemId(item.id)).enqueue(new Callback<OneRequestItemJson>() {
+          @Override
+          public void onResponse(Call<OneRequestItemJson> call, Response<OneRequestItemJson> response) {
+            Log.d("요청 처리", "거절 처리 성공");
+            removeItem(item);
+            clickListener.refresh();
+            Toast.makeText(context, "거절 처리 성공", Toast.LENGTH_SHORT).show();
+          }
+
+
+
+          @Override
+          public void onFailure(Call<OneRequestItemJson> call, Throwable t) {
+            Log.d("요청 처리", "거절 처리 실패");
+            t.printStackTrace();
+          }
+        });
+      }
+    });
+
     convertView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        Toast.makeText(context, item.latitude + "확인", Toast.LENGTH_SHORT).show();
         View dialog = (View) View.inflate(context, R.layout.image_view, null);
         AlertDialog.Builder dlg = new AlertDialog.Builder(context);
         dlg.setView(dialog);
@@ -65,18 +142,10 @@ public class ListAdapter extends BaseAdapter {
                 .load(item.imageUrl)
                 .into(image);
 
-
         dlg.setPositiveButton("확인", null);
         dlg.show();
       }
     });
-
-
-    latitude.setText("위도 : " + item.latitude);
-    longitude.setText("경도 : " + item.longitude);
-
-    typeNaming(item, type);
-
 
     return convertView;
 
@@ -92,5 +161,9 @@ public class ListAdapter extends BaseAdapter {
 
   public void addItem(RequestItem test) {
     items.add(test);
+  }
+
+  public void removeItem(RequestItem test) {
+    items.remove(test);
   }
 }
