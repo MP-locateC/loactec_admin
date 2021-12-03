@@ -1,4 +1,4 @@
-package com.example.locatec;
+package com.example.admin;
 
 class requestInfo {
   String latitude = "latitude";

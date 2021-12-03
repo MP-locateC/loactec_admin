@@ -1,4 +1,4 @@
-package com.example.locatec;
+package com.example.admin;
 
 interface ClickListener {
   void refresh();

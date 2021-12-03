@@ -1,4 +1,4 @@
-package com.example.locatec;
+package com.example.admin;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -20,16 +20,16 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class AllProduct extends Fragment {
+public class AllRegisterRequest extends Fragment {
 
   private View view;
-  ProductListAdapter adapter;
+  RequestListAdapter adapter;
   ListView listView;
 
   @Nullable
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-    view = inflater.inflate(R.layout.all_product, container, false);
+    view = inflater.inflate(R.layout.all_register_request, container, false);
 
     Gson gson = new GsonBuilder()
             .setLenient()
@@ -42,12 +42,12 @@ public class AllProduct extends Fragment {
 
     Api api = retrofit.create(Api.class);
 
-    api.findAll().enqueue(new Callback<AllRequestItemsJson>() {
+    api.findNotRegistered().enqueue(new Callback<AllRequestItemsJson>() {
       @Override
       public void onResponse(Call<AllRequestItemsJson> call, Response<AllRequestItemsJson> response) {
         Log.d("전체 요청 리스트 조회", "성공");
-        listView = view.findViewById(R.id.productList);
-        adapter = new ProductListAdapter();
+        listView = view.findViewById(R.id.requestLists);
+        adapter = new RequestListAdapter();
 
         adapter.setClickListener(new ClickListener() {
           @Override
@@ -59,7 +59,7 @@ public class AllProduct extends Fragment {
 
         for (int i = 0; i < response.body().response.size(); i++) {
           ProductItem productItem = response.body().response.get(i);
-          if (productItem.isRegister) adapter.addItem(productItem);
+          adapter.addItem(productItem);
         }
 
         listView.setAdapter(adapter);
@@ -75,3 +75,4 @@ public class AllProduct extends Fragment {
     return view;
   }
 }
+

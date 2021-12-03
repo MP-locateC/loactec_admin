@@ -1,4 +1,4 @@
-package com.example.locatec;
+package com.example.admin;
 
 import lombok.Getter;
 import lombok.Setter;

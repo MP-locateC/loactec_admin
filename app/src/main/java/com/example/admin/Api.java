@@ -1,7 +1,5 @@
-package com.example.locatec;
+package com.example.admin;
 
-import lombok.Getter;
-import lombok.Setter;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

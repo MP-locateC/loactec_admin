@@ -1,4 +1,4 @@
-package com.example.locatec;
+package com.example.admin;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package com.example.locatec;
+package com.example.admin;
 
 import android.content.Context;
 import android.util.Log;
@@ -27,7 +27,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class ProductListAdapter extends BaseAdapter {
+public class RequestListAdapter extends BaseAdapter {
   List<ProductItem> items = new ArrayList<>();
   ClickListener clickListener;
   Context context;
@@ -59,14 +59,15 @@ public class ProductListAdapter extends BaseAdapter {
     if (convertView == null) {
       LayoutInflater inflater =
               (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-      convertView = inflater.inflate(R.layout.registered, parent, false);
+      convertView = inflater.inflate(R.layout.request, parent, false);
     }
 
     TextView id = convertView.findViewById(R.id.id);
     TextView latitude = convertView.findViewById(R.id.latitude);
     TextView longitude = convertView.findViewById(R.id.longitude);
     TextView type = convertView.findViewById(R.id.type);
-    Button delete = convertView.findViewById(R.id.delete);
+    Button accept = convertView.findViewById(R.id.accept);
+    Button reject = convertView.findViewById(R.id.reject);
 
     id.setText(item.id.toString());
     latitude.setText("위도 : " + item.latitude);
@@ -85,22 +86,43 @@ public class ProductListAdapter extends BaseAdapter {
             .build();
 
     Api api = retrofit.create(Api.class);
-
-    delete.setOnClickListener(new View.OnClickListener() {
+    accept.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        api.deleteProduct(new ItemId(item.id)).enqueue(new Callback<DeleteResponseJson>() {
+        api.permitRequest(new ItemId(item.id)).enqueue(new Callback<OneRequestItemJson>() {
           @Override
-          public void onResponse(Call<DeleteResponseJson> call, Response<DeleteResponseJson> response) {
-            Log.d("요청 처리", "삭제 성공");
-            removeItem(item);
-            clickListener.refresh();
-            Toast.makeText(context, "삭제 성공", Toast.LENGTH_SHORT).show();
+          public void onResponse(Call<OneRequestItemJson> call, Response<OneRequestItemJson> response) {
+            Log.d("요청 처리", "수락 처리 성공");
+            Toast.makeText(context, "수락 처리 성공", Toast.LENGTH_SHORT).show();
           }
 
           @Override
-          public void onFailure(Call<DeleteResponseJson> call, Throwable t) {
-            Log.d("요청 처리", "삭제 실패");
+          public void onFailure(Call<OneRequestItemJson> call, Throwable t) {
+            Log.d("요청 처리", "수락 처리 실패");
+            t.printStackTrace();
+          }
+        });
+      }
+    });
+
+
+    reject.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        api.rejectRequest(new ItemId(item.id)).enqueue(new Callback<OneRequestItemJson>() {
+          @Override
+          public void onResponse(Call<OneRequestItemJson> call, Response<OneRequestItemJson> response) {
+            Log.d("요청 처리", "거절 처리 성공");
+            removeItem(item);
+            clickListener.refresh();
+            Toast.makeText(context, "거절 처리 성공", Toast.LENGTH_SHORT).show();
+          }
+
+
+
+          @Override
+          public void onFailure(Call<OneRequestItemJson> call, Throwable t) {
+            Log.d("요청 처리", "거절 처리 실패");
             t.printStackTrace();
           }
         });
