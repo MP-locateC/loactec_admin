@@ -27,7 +27,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class ListAdapter extends BaseAdapter {
+public class RequestListAdapter extends BaseAdapter {
   List<RequestItem> items = new ArrayList<>();
   ClickListener clickListener;
   Context context;

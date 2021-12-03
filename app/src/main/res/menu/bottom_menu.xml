@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/register"
+        android:enabled="true"
+        android:title="등록 요청" />
+
+    <item
+        android:id="@+id/all"
+        android:enabled="true"
+        android:title="등록 중인 제품" />
+
+</menu>

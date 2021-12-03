@@ -1,74 +1,72 @@
 package com.example.locatec;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ListView;
+import android.view.MenuItem;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-  ListAdapter adapter;
-  ListView listView;
+  private BottomNavigationView bottomNavigationView;
+  private FragmentManager fm;
+  private FragmentTransaction ft;
+
+
+  private AllRegisterRequest allRegisterRequest;
+  private AllProduct allProduct;
 
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-
-    Gson gson = new GsonBuilder()
-            .setLenient()
-            .create();
-
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://www.stmap.kro.kr")
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build();
-
-    Api api = retrofit.create(Api.class);
-
-    api.findAll().enqueue(new Callback<AllRequestItemsJson>() {
-      @Override
-      public void onResponse(Call<AllRequestItemsJson> call, Response<AllRequestItemsJson> response) {
-        Log.d("전체 요청 리스트 조회", "성공");
-        listView = findViewById(R.id.requestLists);
-        adapter = new ListAdapter();
-
-        adapter.setClickListener(new ClickListener() {
-          @Override
-          public void refresh() {
-            adapter.notifyDataSetChanged();
-          }
-        });
-
-        for (int i = 0; i < response.body().response.size(); i++) {
-          RequestItem requestItem = response.body().response.get(i);
-          adapter.addItem(requestItem);
-        }
-
-        listView.setAdapter(adapter);
-
-      }
-
-      @Override
-      public void onFailure(Call<AllRequestItemsJson> call, Throwable t) {
-        Log.d("전체 요청 리스트 조회", "실패");
-        t.printStackTrace();
-      }
-    });
+    setContentView(R.layout.main_view);
 
 
+    bottomNavigationView = findViewById(R.id.bottom);
+    bottomNavigationView.setSelectedItemId(R.id.register);
+
+    allRegisterRequest = new AllRegisterRequest();
+    allProduct = new AllProduct();
+    setFrag(0);
+
+    bottomNavigationView.setOnNavigationItemSelectedListener(
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+              @Override
+              public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                  case R.id.register:
+                    setFrag(0);
+                    break;
+                  case R.id.all:
+                    setFrag(1);
+                    break;
+                }
+                return true;
+              }
+            });
   }
+
+  private void setFrag(int n) {
+    fm = getSupportFragmentManager();
+    ft = fm.beginTransaction();
+    switch (n) {
+      case 0:
+        ft.replace(R.id.main_frame, allRegisterRequest);
+        ft.commit();
+        break;
+      case 1:
+        ft.replace(R.id.main_frame, allProduct);
+        ft.commit();
+        break;
+    }
+  }
+
 }
 

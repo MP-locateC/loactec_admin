@@ -8,6 +8,9 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface Api {
+  @GET("/api/admin/find/NotRegistered")
+  Call<AllRequestItemsJson> findNotRegistered();
+
   @GET("/api/admin/find/all")
   Call<AllRequestItemsJson> findAll();
 
