@@ -19,6 +19,9 @@ public interface Api {
 
   @POST("/api/admin/register/reject")
   Call<OneRequestItemJson> rejectRequest(@Body ItemId itemId);
+
+  @POST("/api/admin/delete")
+  Call<DeleteResponseJson> deleteProduct(@Body ItemId itemId);
 }
 
 

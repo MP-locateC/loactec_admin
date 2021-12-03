@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-class RequestItem {
+class ProductItem {
   Long id;
   String createdAt;
   String updatedAt;

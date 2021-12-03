@@ -23,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AllProduct extends Fragment {
 
   private View view;
-  RequestListAdapter adapter;
+  ProductListAdapter adapter;
   ListView listView;
 
   @Nullable
@@ -47,7 +47,7 @@ public class AllProduct extends Fragment {
       public void onResponse(Call<AllRequestItemsJson> call, Response<AllRequestItemsJson> response) {
         Log.d("전체 요청 리스트 조회", "성공");
         listView = view.findViewById(R.id.productList);
-        adapter = new RequestListAdapter();
+        adapter = new ProductListAdapter();
 
         adapter.setClickListener(new ClickListener() {
           @Override
@@ -58,8 +58,8 @@ public class AllProduct extends Fragment {
 
 
         for (int i = 0; i < response.body().response.size(); i++) {
-          RequestItem requestItem = response.body().response.get(i);
-          if (requestItem.isRegister) adapter.addItem(requestItem);
+          ProductItem productItem = response.body().response.get(i);
+          if (productItem.isRegister) adapter.addItem(productItem);
         }
 
         listView.setAdapter(adapter);

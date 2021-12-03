@@ -58,8 +58,8 @@ public class AllRegisterRequest extends Fragment {
 
 
         for (int i = 0; i < response.body().response.size(); i++) {
-          RequestItem requestItem = response.body().response.get(i);
-          adapter.addItem(requestItem);
+          ProductItem productItem = response.body().response.get(i);
+          adapter.addItem(productItem);
         }
 
         listView.setAdapter(adapter);

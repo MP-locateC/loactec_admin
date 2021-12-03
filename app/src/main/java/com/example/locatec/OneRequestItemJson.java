@@ -7,5 +7,6 @@ import lombok.Setter;
 @Setter
 class OneRequestItemJson {
   int status;
-  RequestItem response;
+  ProductItem response;
 }
+
