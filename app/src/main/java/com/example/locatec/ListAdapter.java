@@ -41,9 +41,10 @@ public class ListAdapter extends BaseAdapter {
       convertView = inflater.inflate(R.layout.request, parent, false);
     }
 
-    // todo :: 비율 조정
     TextView latitude = convertView.findViewById(R.id.latitude);
     TextView longitude = convertView.findViewById(R.id.longitude);
+    TextView type = convertView.findViewById(R.id.type);
+
 
     // todo :: type 설정
 
@@ -57,11 +58,11 @@ public class ListAdapter extends BaseAdapter {
     });
 
 
-    latitude.setText(item.latitude);
-    longitude.setText(item.longitude);
+    latitude.setText("위도 : " + item.latitude);
+    longitude.setText("경도 : " + item.longitude);
+    type.setText(item.type);
 
     return convertView;
-
 
   }
 
