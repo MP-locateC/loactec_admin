@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.main_view);
 
-
     bottomNavigationView = findViewById(R.id.bottom);
     bottomNavigationView.setSelectedItemId(R.id.register);
 
@@ -58,10 +57,12 @@ public class MainActivity extends AppCompatActivity {
     switch (n) {
       case 0:
         ft.replace(R.id.main_frame, allRegisterRequest);
+        setTitle("등록 요청");
         ft.commit();
         break;
       case 1:
         ft.replace(R.id.main_frame, allProduct);
+        setTitle("등록 중인 제품");
         ft.commit();
         break;
     }

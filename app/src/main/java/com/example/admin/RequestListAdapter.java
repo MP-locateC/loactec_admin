@@ -93,6 +93,8 @@ public class RequestListAdapter extends BaseAdapter {
           @Override
           public void onResponse(Call<OneRequestItemJson> call, Response<OneRequestItemJson> response) {
             Log.d("요청 처리", "수락 처리 성공");
+            removeItem(item);
+            clickListener.refresh();
             Toast.makeText(context, "수락 처리 성공", Toast.LENGTH_SHORT).show();
           }
 
